@@ -53,7 +53,7 @@ describe('Try to remove roles from user', async function () {
     });
 });
 
-describe.only('Try to delete roles', async function () {
+describe('Try to delete roles', async function () {
     before(async function () {
         const user = await addUser(validUser);
         await setupTestUserPupilRole(user.id);
