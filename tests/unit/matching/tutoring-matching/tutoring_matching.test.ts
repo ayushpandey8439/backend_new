@@ -2,70 +2,66 @@ import { addUser } from '../../../../dataStore/types/user';
 import { pupil, validUser, volunteer } from '../../../userConfiguration';
 import chai from 'chai';
 import {
-    createCoacheeMatchRequest,
-    createCoachingMatchRequest,
-    createProjectCoachingOffer,
-    deleteCoacheeMatchRequest,
-    deleteCoachingMatchRequest,
-    deleteCoachingOffer,
-    deleteProjectCoachingMatch,
+    createTuteeMatchRequest,
+    createTutoringOffer,
+    createTutorMatchRequest,
     deletePupil,
+    deleteTuteeMatchRequest,
+    deleteTutoringMatch,
+    deleteTutoringOffer,
+    deleteTutorMatchRequest,
     deleteVolunteer,
-    getProjectMatches,
+    getTutoringMatches,
     makeUserPupil,
     makeUserVolunteer,
 } from '../../../../dataStore/matchingDataQueries';
 import { deleteUser } from '../../../../dataStore/testingQueries';
-import { executeProjectMatch } from '../../../../jobs/periodic/project-matching';
 import { logInfo } from '../../../../services/logger';
+import { executeTutoringMatch } from '../../../../jobs/periodic/tutoring-matching';
 
 process.env.NODE_ENV = 'test';
 process.env.PROJECT_MATCH_INTERVAL = '0';
 
-describe('Project Matching Tests', function () {
+describe.only('Tutoring Matching Tests', function () {
     before(async function () {
         const pupilUser = await addUser(pupil);
         const volunteerUser = await addUser(volunteer);
         const Volunteer = await makeUserVolunteer(volunteerUser.id);
         const Pupil = await makeUserPupil(pupilUser.id);
-        const coachingOffer = await createProjectCoachingOffer(Volunteer.id);
-        const CoachingMatchRequest = await createCoachingMatchRequest(
-            coachingOffer.id
+        const TutoringOffer = await createTutoringOffer(Volunteer.id);
+        const TutorMatchRequest = await createTutorMatchRequest(
+            TutoringOffer.id
         );
-        const CoacheeMatchRequest = await createCoacheeMatchRequest(
-            Pupil.id,
-            coachingOffer.id
-        );
+        const TuteeMatchRequest = await createTuteeMatchRequest(Pupil.id);
 
-        this.coachingMatchRequest = CoachingMatchRequest;
-        this.coacheeMatchRequest = CoacheeMatchRequest;
-        this.coachingOffer = coachingOffer;
+        this.TutorMatchRequest = TutorMatchRequest;
+        this.TuteeMatchRequest = TuteeMatchRequest;
+        this.TutoringOffer = TutoringOffer;
         this.Volunteer = Volunteer;
         this.Pupil = Pupil;
     });
 
     after(async function () {
-        await deleteProjectCoachingMatch(this.coachingMatchRequest.id);
-        await deleteCoachingMatchRequest(this.coachingMatchRequest.id);
-        await deleteCoacheeMatchRequest(this.coacheeMatchRequest.id);
-        await deleteCoachingOffer(this.coachingOffer.id);
+        await deleteTutoringMatch(this.TutorMatchRequest.id);
+        await deleteTutorMatchRequest(this.TutorMatchRequest.id);
+        await deleteTuteeMatchRequest(this.TuteeMatchRequest.id);
+        await deleteTutoringOffer(this.TutoringOffer.id);
         await deleteVolunteer(this.Volunteer.id);
         await deletePupil(this.Pupil.id);
         await deleteUser(pupil.email);
         await deleteUser(volunteer.email);
     });
     it('should Match the Helper with the Helpee', async function () {
-        await executeProjectMatch();
-        const Matches = await getProjectMatches();
+        await executeTutoringMatch();
+        const Matches = await getTutoringMatches();
         logInfo('Matches: ' + JSON.stringify(Matches));
         let matchSaved = false;
 
         Matches.forEach((match) => {
-            if (match.coachMatchRequestId == this.coachingMatchRequest.id) {
+            if (match.tutorMatchRequestId == this.TutorMatchRequest.id) {
                 matchSaved = true;
             }
         });
-
         chai.assert.equal(matchSaved, true);
     });
 });

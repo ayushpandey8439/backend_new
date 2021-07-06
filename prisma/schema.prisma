@@ -180,6 +180,7 @@ model TuteeMatchRequest {
   tutee      Pupil          @relation(fields: [pupilId], references: [id])
   pupilId    String
   validUntil DateTime?
+  subjects   String
   parameters String
   match      TutoringMatch?
 }

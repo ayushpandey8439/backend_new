@@ -2,7 +2,8 @@ import { projectMatchAllowed } from './precheck';
 import { logInfo } from '../../../services/logger';
 import {
     getCoacheeMatchRequests,
-    getCoachMatchRequests, storeMatches,
+    getCoachMatchRequests,
+    storeProjectMatches,
 } from '../../../dataStore/matchingDataQueries';
 
 import { match as computeMatching, Stats } from 'corona-school-matching';
@@ -25,6 +26,5 @@ export async function createProjectMatches() {
     const helpees = await getCoacheesFromRequests(projectCoacheesRequests);
 
     const MatchingResult = computeMatching(helpers, helpees);
-    const storedMatches = storeMatches(MatchingResult.matches);
-    logInfo(JSON.stringify(MatchingResult));
+    const storedMatches = storeProjectMatches(MatchingResult.matches);
 }

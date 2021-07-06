@@ -2,3 +2,5 @@ export const PROJECT_MATCH_INTERVAL = 1;
 export const MIN_COACHEE_COUNT_FOR_MATCH_ATTEMPT = 5;
 export const TUTORING_MATCH_INTERVAL = 1;
 export const MIN_TUTEE_COUNT_FOR_MATCH_ATTEMPT = 5;
+export const MIN_TUTOR_GRADE = 0;
+export const MAX_TUTOR_GRADE = 10;
