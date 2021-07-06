@@ -22,7 +22,7 @@ import { executeTutoringMatch } from '../../../../jobs/periodic/tutoring-matchin
 process.env.NODE_ENV = 'test';
 process.env.PROJECT_MATCH_INTERVAL = '0';
 
-describe.only('Tutoring Matching Tests', function () {
+describe('Tutoring Matching Tests', function () {
     before(async function () {
         const pupilUser = await addUser(pupil);
         const volunteerUser = await addUser(volunteer);
