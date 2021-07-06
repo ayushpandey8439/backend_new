@@ -34,3 +34,22 @@ export const alternateUser = {
     email: 'test1.user1@corona-school.de',
     phone: '+4917674853266',
 };
+
+
+export const pupil = {
+    firstName: 'test',
+    lastName: 'pupil',
+    email: 'test.pupil@corona-school.de',
+    password: 'password',
+    notificationLevel: 'all' as const,
+    phone: '+4900000000000',
+};
+
+export const volunteer = {
+    firstName: 'test',
+    lastName: 'volunteer',
+    email: 'test.volunteer@corona-school.de',
+    password: 'password',
+    notificationLevel: 'all' as const,
+    phone: '+4900000000001',
+};
